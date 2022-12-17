@@ -9,11 +9,11 @@ if ( !isset($_POST['user'])) {
         <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">
         <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65\" crossorigin=\"anonymous\">
     
-        <title>Byebye Twitter, Hello Mastodon.</title>
+        <title>Hello Mastodon.</title>
       </head>
       <body>
     <div class=\"container\">
-    <H1>Generate a image for Twitter so your followers know where you are.</H1>
+    <H1>Generate a image for \"other social networks\" so your followers know where you are.</H1>
     <H5>Save the resulting image and upload to your favorite social network. Depending on the settings used it should not be easy for IA to autodetect its contents.</H5>
 
     <FORM METHOD=\"POST\" ACTION=\"".$_SERVER['PHP_SELF']."\" TARGET=\"imagen\">
@@ -47,12 +47,27 @@ if ( !isset($_POST['user'])) {
           <label class=\"form-check-label\" for=\"Radio3\">Hide Mastodon & Warning logo</label>
         </div>
       </fieldset>
+    <fieldset class=\"mb-3\">
+        <legend>Security:</legend>
+        <div class=\"form-check\">
+          <input type=\"checkbox\" checked=\"true\" name=\"fonts\" value=\"1\" class=\"form-check-input\" id=\"Check1\">
+          <label class=\"form-check-label\" for=\"Check1\">Use non-standard fonts which are harder to read.</label>
+        </div>
+        <div class=\"form-check\">
+          <input type=\"checkbox\" checked=\"true\" name=\"random\" value=\"1\" class=\"form-check-input\" id=\"Check2\">
+          <label class=\"form-check-label\" for=\"Check2\">Rotate text and position text randomly.</label>
+        </div>
+      </fieldset>
+
     <fieldset>
         <INPUT TYPE=\"SUBMIT\" class=\"btn btn-primary\" VALUE=\"Send!\"><br/><br/>
     </fieldset>
     </FORM>
     <IFRAME STYLE=\"width: 100%; height: 400px; border: 0px;\" NAME=\"imagen\"></IFRAME>
+
+    <br><br><H5>Code available at <a href=\"https://github.com/trankten/tkzicu\" target=\"_blank\">Github</a>.</H5>
     </div>
+
     </BODY></HTML>";
 
 }
@@ -86,24 +101,24 @@ else {
     
     if ( intval($_POST['logos']) <= 1 ) {
         $logo = imagecreatefrompng("logo.png");
-        $logo = imagerotate($logo, rand(-21,21), imageColorAllocateAlpha($logo, 0, 0, 0, 127));
-        imagecopyresampled($im, $logo, rand(18,22), rand(18,22), 0, 0, 155, 155, imagesx($logo), imagesy($logo));
+        $logo = imagerotate($logo, random(-21,21), imageColorAllocateAlpha($logo, 0, 0, 0, 127));
+        imagecopyresampled($im, $logo, random(18,22), random(18,22), 0, 0, 155, 155, imagesx($logo), imagesy($logo));
     }
 
     if ( intval($_POST['logos']) <= 2 ) {    
         $warn = imagecreatefrompng("warning.png");
-        $warn = imagerotate($warn, rand(-21,21), imageColorAllocateAlpha($warn, 0, 0, 0, 127));
-        imagecopyresampled($im, $warn, rand(618,622), rand(18,22), 0, 0, 146, 138, imagesx($warn), imagesy($warn));
+        $warn = imagerotate($warn, random(-21,21), imageColorAllocateAlpha($warn, 0, 0, 0, 127));
+        imagecopyresampled($im, $warn, random(618,622), random(18,22), 0, 0, 146, 138, imagesx($warn), imagesy($warn));
     }
     
     $color = imagecolorallocate($im, 30,30,30);
     
-    imagettftext($im, rand(56,59), rand(-3,3), 220, 141, $color, "./ame.ttf", l8n("ADVERTENCIA", $lang));
-    imagettftext($im, rand(20,22), rand(-1,1), rand(29,33), rand(195,200), $color, "./joker.ttf", l8n("Esta cuenta también está disponible en Mastodon.", $lang));
-    imagettftext($im, rand(20,22), rand(-1,1), rand(29,33), rand(245,250), $color, "./tt0605m.ttf", l8n("Puedes encontrarme en:", $lang));
-    imagettftext($im, rand(30,32), rand(-1,1), rand(29,33), rand(305,310), $color, "./stepes.ttf", $cuenta);
-    imagettftext($im, rand(14,16), rand(-1,1), rand(29,33), rand(350,355), $color, "./joker.ttf", l8n("Mastodon es una red social federada, gratuita y de código abierto.", $lang));
-    imagettftext($im, rand(14,16), rand(-1,1), rand(507,512), rand(390,395), $color, "./joker.ttf", l8n("Más en: JoinMastodon.org",$lang));
+    imagettftext($im, random(56,59), random(-3,3), 220, 141, $color, (isset($_POST['fonts'])?"./ame.ttf":"./galaxy.ttf"), l8n("ADVERTENCIA", $lang));
+    imagettftext($im, random(20,22), random(-1,1), random(29,33), random(195,200), $color, (isset($_POST['fonts'])?"./joker.ttf":"./galaxy.ttf"), l8n("Esta cuenta también está disponible en Mastodon.", $lang));
+    imagettftext($im, random(20,22), random(-1,1), random(29,33), random(245,250), $color, (isset($_POST['fonts'])?"./tt0605m.ttf":"./galaxy.ttf"), l8n("Puedes encontrarme en:", $lang));
+    imagettftext($im, random(30,32), random(-1,1), random(29,33), random(305,310), $color, (isset($_POST['fonts'])?"./stepes.ttf":"./galaxy.ttf"), $cuenta);
+    imagettftext($im, random(14,16), random(-1,1), random(29,33), random(350,355), $color, (isset($_POST['fonts'])?"./joker.ttf":"./galaxy.ttf"), l8n("Mastodon es una red social federada, gratuita y de código abierto.", $lang));
+    imagettftext($im, random(14,16), random(-1,1), random(415,445), random(390,395), $color, (isset($_POST['fonts'])?"./joker.ttf":"./galaxy.ttf"), l8n("Más en: JoinMastodon.org",$lang));
     
     for($i = 0; $i < $x; $i++) {
         for($j = 0; $j < $y; $j++) {
@@ -126,12 +141,18 @@ else {
 
 }
 
+function random($a,$b) {
+    global $_POST;
+    if ( isset($_POST['random'])) return rand($a,$b);
+    else return ceil(($a+$b)/2);
+}
+
 function l8n($texto,$lang="ES") {
     $l8n['EN']['ADVERTENCIA'] = "WARNING";
     $l8n['EN']['Esta cuenta también está disponible en Mastodon.'] = "This account is also available in Mastodon.";
     $l8n['EN']['Puedes encontrarme en:'] = "You can find me at:";
     $l8n['EN']['Mastodon es una red social federada, gratuita y de código abierto.'] = "Mastodon is an open source, free and federated social network";
-    $l8n['EN']['Más en: JoinMastodon.org'] = "Find more: JoinMastodon.org.";
+    $l8n['EN']['Más en: JoinMastodon.org'] = "Find more: JoinMastodon.org";
 
     return isset($l8n[($lang)][($texto)])?$l8n[($lang)][($texto)]:$texto;
 }
